@@ -23,12 +23,17 @@
   --radius-xs: 10px;
 }
 
+html {
+  scrollbar-gutter: stable;
+}
+
 html, body, #root {
   height: 100%;
   overflow: hidden;
 }
 
 body {
+  margin: 0;
   font-family: "Inter", sans-serif;
   background: #ffffff;
   color: var(--text);

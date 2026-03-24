@@ -2,52 +2,266 @@
 <html>
 <head>
   <style>
-    body { width: 380px; padding: 16px; font-family: system-ui, sans-serif; max-height: 600px; overflow-y: auto; }
-    h3 { margin-top: 0; margin-bottom: 14px; }
-    input, textarea { width: 100%; margin-bottom: 8px; padding: 8px; box-sizing: border-box; font-family: inherit; }
-    textarea { resize: vertical; min-height: 60px; }
-    .row { display: flex; gap: 8px; }
-    .row input { flex: 1; margin-bottom: 8px; }
-    button { width: 100%; padding: 10px; background: #000; color: #fff; border: none; cursor: pointer; margin-top: 8px; }
-    button:hover { background: #333; }
-    img { max-width: 100%; max-height: 150px; margin-bottom: 12px; display: none; object-fit: contain; }
-    #statusMsg { margin-top: 12px; color: green; text-align: center; font-weight: bold; }
-    label { display: block; font-size: 12px; font-weight: 600; color: #555; margin-bottom: 2px; }
-    .required { color: #e74c3c; }
+    * { box-sizing: border-box; }
+    
+    html {
+      overflow-y: scroll;
+      scrollbar-gutter: stable;
+    }
+    
+    body { 
+      width: 380px; 
+      padding: 20px; 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; 
+      background: #fff;
+      color: #1a1a1a;
+      margin: 0;
+    }
+    
+    h3 { 
+      margin: 0 0 18px 0; 
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: #000;
+    }
+    
+    .header-section {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 16px;
+      flex-direction: column;
+    }
+
+    .title-section {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .title-section label {
+      margin-bottom: 0;
+    }
+
+    .title-section input {
+      margin-bottom: 0;
+      font-size: 15px;
+      padding: 11px;
+      font-weight: 500;
+    }
+
+    .details-row {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .details-inputs {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .details-inputs label {
+      margin-bottom: 0;
+    }
+
+    .details-inputs input {
+      margin-bottom: 0;
+      font-size: 13px;
+      padding: 9px;
+    }
+    
+    img { 
+      width: 160px;
+      height: 160px;
+      display: none; 
+      object-fit: cover;
+      border-radius: 8px;
+      flex-shrink: 0;
+      background: #f5f5f5;
+      border: none;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+    
+    label { 
+      display: block; 
+      font-size: 12px; 
+      font-weight: 600; 
+      color: #555; 
+      margin-bottom: 5px;
+      letter-spacing: 0.3px;
+    }
+    
+    .required { color: #d63031; }
+    
+    input, textarea { 
+      width: 100%; 
+      padding: 9px 11px; 
+      margin-bottom: 12px; 
+      box-sizing: border-box; 
+      font-family: inherit;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      font-size: 13px;
+      transition: all 0.15s ease;
+      background: #fafafa;
+      color: #1a1a1a;
+    }
+    
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #333;
+      background: #fff;
+      box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.08);
+    }
+    
+    textarea { 
+      resize: vertical; 
+      min-height: 50px;
+      font-family: inherit;
+    }
+    
+    .row { 
+      display: flex; 
+      gap: 10px; 
+      margin-bottom: 4px;
+    }
+    
+    .row > div {
+      flex: 1;
+    }
+    
+    .row input { 
+      margin-bottom: 0;
+    }
+    
+    .section-divider {
+      height: 1px;
+      background: #f0f0f0;
+      margin: 12px 0;
+    }
+    
+    .toggle-section {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 0;
+      font-size: 12px;
+      font-weight: 700;
+      color: #666;
+      user-select: none;
+      letter-spacing: 0.3px;
+      transition: color 0.15s ease;
+    }
+    
+    .toggle-section:hover {
+      color: #333;
+    }
+    
+    .toggle-icon {
+      display: inline-block;
+      transition: transform 0.2s ease;
+      font-size: 10px;
+    }
+    
+    .toggle-section.collapsed .toggle-icon {
+      transform: rotate(-90deg);
+    }
+    
+    .optional-fields {
+      display: none;
+      margin-top: 8px;
+    }
+    
+    .optional-fields.visible {
+      display: block;
+    }
+    
+    button { 
+      width: 100%; 
+      padding: 12px; 
+      background: #000; 
+      color: #fff; 
+      border: none; 
+      cursor: pointer; 
+      margin-top: 14px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 13px;
+      transition: all 0.2s ease;
+      letter-spacing: 0.3px;
+    }
+    
+    button:hover { 
+      background: #1a1a1a;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    button:active {
+      background: #000;
+    }
+    
+    #statusMsg { 
+      margin-top: 10px; 
+      text-align: center; 
+      font-weight: 600;
+      font-size: 12px;
+      color: #059669;
+    }
   </style>
 </head>
 <body>
   <h3>Add to Alphia</h3>
-  <img id="imagePreview" />
   
-  <label>Product Title <span class="required">*</span></label>
-  <input type="text" id="titleInput" placeholder="Product Title" required />
-  
-  <label>Price <span class="required">*</span></label>
-  <input type="number" id="priceInput" placeholder="Price (e.g. 89.00)" step="0.01" required />
-  
-  <label>Image URL <span class="required">*</span></label>
-  <input type="text" id="imageInput" placeholder="Image URL or Base64" required />
-  
-  <div class="row">
-    <div style="flex: 1;">
-      <label>Color</label>
-      <input type="text" id="colorInput" placeholder="Color (optional)" />
+  <div class="header-section">
+    <div class="title-section">
+      <label>Product Title <span class="required">*</span></label>
+      <input type="text" id="titleInput" placeholder="Product Title" required />
     </div>
-    <div style="flex: 1;">
-      <label>Size</label>
-      <input type="text" id="sizeInput" placeholder="Size (optional)" />
+    
+    <div class="details-row">
+      <div class="details-inputs">
+        <label>Price <span class="required">*</span></label>
+        <input type="number" id="priceInput" placeholder="Price (e.g. 89.00)" step="0.01" required />
+        
+        <label>Image URL <span class="required">*</span></label>
+        <input type="text" id="imageInput" placeholder="Image URL or Base64" required />
+      </div>
+      <img id="imagePreview" />
     </div>
   </div>
   
-  <label>Material</label>
-  <input type="text" id="materialInput" placeholder="Material/Fabric (optional)" />
+  <div class="section-divider"></div>
   
-  <label>SKU</label>
-  <input type="text" id="skuInput" placeholder="Product Code (optional)" />
+  <div class="toggle-section collapsed" id="toggleOptional">
+    <span class="toggle-icon">▶</span>
+    <span>More Details</span>
+  </div>
   
-  <label>Notes</label>
-  <textarea id="notesInput" placeholder="Write anything you want here..."></textarea>
+  <div class="optional-fields" id="optionalFields">
+    <div class="row">
+      <div style="flex: 1;">
+        <label>Color</label>
+        <input type="text" id="colorInput" placeholder="Color" />
+      </div>
+      <div style="flex: 1;">
+        <label>Size</label>
+        <input type="text" id="sizeInput" placeholder="Size" />
+      </div>
+    </div>
+    
+    <label>Material</label>
+    <input type="text" id="materialInput" placeholder="Material/Fabric" />
+    
+    <label>SKU</label>
+    <input type="text" id="skuInput" placeholder="Product Code" />
+    
+    <label>Notes</label>
+    <textarea id="notesInput" placeholder="Notes..."></textarea>
+  </div>
   
   <button id="saveBtn">Save Item</button>
   <div id="statusMsg"></div>

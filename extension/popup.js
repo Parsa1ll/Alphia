@@ -17,8 +17,8 @@ function extractPageData() {
   
   const extractPrice = (text) => {
     if (!text) return '';
-    const match = text.match(/\d+(\.\d{2})?/);
-    return match ? match[0] : '';
+    const match = text.match(/[\d,]+(\.[\d]{2})?/);
+    return match ? match[0].replace(/,/g, '') : '';
   };
 
   const isValidImageUrl = (url) => {
@@ -235,4 +235,18 @@ saveBtn.addEventListener('click', () => {
       setTimeout(() => window.close(), 1500);
     });
   });
+});
+
+// Toggle More Details section
+document.addEventListener('DOMContentLoaded', function() {
+  const toggle = document.getElementById('toggleOptional');
+  const fields = document.getElementById('optionalFields');
+  
+  if (toggle && fields) {
+    toggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      toggle.classList.toggle('collapsed');
+      fields.classList.toggle('visible');
+    });
+  }
 });
