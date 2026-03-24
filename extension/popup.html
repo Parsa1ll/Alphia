@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { width: 380px; padding: 16px; font-family: system-ui, sans-serif; max-height: 600px; overflow-y: auto; }
+    h3 { margin-top: 0; margin-bottom: 14px; }
+    input, textarea { width: 100%; margin-bottom: 8px; padding: 8px; box-sizing: border-box; font-family: inherit; }
+    textarea { resize: vertical; min-height: 60px; }
+    .row { display: flex; gap: 8px; }
+    .row input { flex: 1; margin-bottom: 8px; }
+    button { width: 100%; padding: 10px; background: #000; color: #fff; border: none; cursor: pointer; margin-top: 8px; }
+    button:hover { background: #333; }
+    img { max-width: 100%; max-height: 150px; margin-bottom: 12px; display: none; object-fit: contain; }
+    #statusMsg { margin-top: 12px; color: green; text-align: center; font-weight: bold; }
+    label { display: block; font-size: 12px; font-weight: 600; color: #555; margin-bottom: 2px; }
+    .required { color: #e74c3c; }
+  </style>
+</head>
+<body>
+  <h3>Add to Alphia</h3>
+  <img id="imagePreview" />
+  
+  <label>Product Title <span class="required">*</span></label>
+  <input type="text" id="titleInput" placeholder="Product Title" required />
+  
+  <label>Price <span class="required">*</span></label>
+  <input type="number" id="priceInput" placeholder="Price (e.g. 89.00)" step="0.01" required />
+  
+  <label>Image URL <span class="required">*</span></label>
+  <input type="text" id="imageInput" placeholder="Image URL or Base64" required />
+  
+  <div class="row">
+    <div style="flex: 1;">
+      <label>Color</label>
+      <input type="text" id="colorInput" placeholder="Color (optional)" />
+    </div>
+    <div style="flex: 1;">
+      <label>Size</label>
+      <input type="text" id="sizeInput" placeholder="Size (optional)" />
+    </div>
+  </div>
+  
+  <label>Material</label>
+  <input type="text" id="materialInput" placeholder="Material/Fabric (optional)" />
+  
+  <label>SKU</label>
+  <input type="text" id="skuInput" placeholder="Product Code (optional)" />
+  
+  <label>Notes</label>
+  <textarea id="notesInput" placeholder="Write anything you want here..."></textarea>
+  
+  <button id="saveBtn">Save Item</button>
+  <div id="statusMsg"></div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>
