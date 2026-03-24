@@ -1,4 +1,6 @@
 function ItemCard({ item, selected, onToggle, glowReady }) {
+  const details = [item.brand, item.color, item.size, item.material, item.category].filter(Boolean)
+
   return (
     <div className={`item-card ${selected ? 'selected' : ''} ${glowReady ? 'glow-ready' : ''}`} onClick={onToggle}>
       <div className={`item-check ${glowReady ? 'glow-ready' : ''}`}>
@@ -14,6 +16,9 @@ function ItemCard({ item, selected, onToggle, glowReady }) {
       <div className="item-info">
         <div className="item-title">{item.title}</div>
         <div className="item-price">${parseFloat(item.price).toFixed(2)}</div>
+        {details.length > 0 && (
+          <div className="item-details">{details.join(' · ')}</div>
+        )}
       </div>
     </div>
   )

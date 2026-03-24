@@ -1,0 +1,155 @@
+#alphia-fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 2147483647;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+#alphia-fab * {
+  box-sizing: border-box;
+}
+
+#alphia-fab-btn {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  padding: 0;
+  overflow: hidden;
+}
+
+#alphia-fab-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+#alphia-fab-btn.active {
+  transform: scale(0.95);
+}
+
+#alphia-fab-btn img {
+  width: 100%;
+  height: 100%;
+  border-radius: 14px;
+}
+
+#alphia-fab-panel {
+  position: absolute;
+  bottom: 64px;
+  right: 0;
+  width: 300px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  padding: 16px;
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#alphia-fab-panel.open {
+  display: flex;
+}
+
+.alphia-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.alphia-panel-header span {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+#alphia-panel-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #888;
+  padding: 0 4px;
+  line-height: 1;
+}
+
+#alphia-panel-close:hover {
+  color: #333;
+}
+
+#alphia-fab-panel label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: -4px;
+}
+
+#alphia-fab-panel input {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+#alphia-fab-panel input:focus {
+  border-color: #000;
+}
+
+#alphia-panel-img {
+  width: 100%;
+  max-height: 120px;
+  object-fit: contain;
+  border-radius: 8px;
+  background: #f5f5f7;
+  display: none;
+}
+
+.alphia-panel-row {
+  display: flex;
+  gap: 8px;
+}
+
+.alphia-panel-field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+#alphia-panel-save {
+  width: 100%;
+  padding: 10px;
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 4px;
+  transition: opacity 0.2s;
+}
+
+#alphia-panel-save:hover {
+  opacity: 0.85;
+}
+
+#alphia-panel-status {
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  min-height: 18px;
+}

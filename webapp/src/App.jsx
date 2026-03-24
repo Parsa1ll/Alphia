@@ -20,6 +20,14 @@ function App() {
 
   useEffect(() => {
     loadCartItems()
+
+    const onStorageChange = (e) => {
+      if (e.key === STORAGE_KEY) {
+        setCartItems(JSON.parse(e.newValue || '[]'))
+      }
+    }
+    window.addEventListener('storage', onStorageChange)
+    return () => window.removeEventListener('storage', onStorageChange)
   }, [])
 
   const loadCartItems = () => {
@@ -61,6 +69,9 @@ function App() {
       chrome.storage.local.set({ [STORAGE_KEY]: items })
     } else {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
+      window.dispatchEvent(new CustomEvent('alphia_cart_updated', {
+        detail: JSON.stringify(items),
+      }))
     }
   }
 
@@ -197,6 +208,17 @@ function App() {
             >
               {selectedIds.size === cartItems.length && cartItems.length > 0 ? 'Deselect All' : 'Select All'}
             </button>
+            <button
+              className="select-all-btn"
+              onClick={() => {
+                setCartItems([])
+                setSelectedIds(new Set())
+                saveCartItems([])
+              }}
+              disabled={cartItems.length === 0}
+            >
+              Clear Cart
+            </button>
             <div className="cart-scroll-controls">
               <button className="scroll-btn" onClick={() => scrollCart('left')}>
                 <i className="fas fa-chevron-left"></i>
@@ -281,7 +303,7 @@ function App() {
             <h3><span className="alphia-text">Alphia</span> Feedback</h3>
             <div className="bot-message">
               <div className="bot-avatar">
-                <i className="fas fa-robot"></i>
+                <img src="/alphia.png" alt="Alphia" />
               </div>
               <div className="bot-bubble">
                 {previewData?.message
