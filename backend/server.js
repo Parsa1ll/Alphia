@@ -43,10 +43,24 @@ app.use((req, res, next) => {
   next()
 })
 
+// Fetch an image URL and return its base64 data
+async function fetchImageAsBase64(url) {
+  try {
+    const response = await fetch(url)
+    if (!response.ok) return null
+    const buffer = await response.arrayBuffer()
+    const base64 = Buffer.from(buffer).toString('base64')
+    const contentType = response.headers.get('content-type') || 'image/jpeg'
+    return { data: base64, mimeType: contentType.split(';')[0] }
+  } catch {
+    return null
+  }
+}
+
 // Generate outfit image from user photo + items
 app.post('/api/generate-outfit', async (req, res) => {
   try {
-    const { userPhotoBase64, itemNames } = req.body
+    const { userPhotoBase64, itemNames, itemImageUrls } = req.body
 
     if (!userPhotoBase64) {
       return res.status(400).json({ error: 'User photo is required.' })
@@ -57,9 +71,31 @@ app.post('/api/generate-outfit', async (req, res) => {
     }
 
     const itemList = itemNames.join(', ')
-    const prompt = `You are a professional fashion designer and stylist. Look at the person in the uploaded photo. Generate a realistic image of that same person wearing these clothing items together: ${itemList}.
+    const prompt = `Edit the person's photo to dress them in these clothing items: ${itemList}. Reference product images are attached showing what each item looks like.
 
-Keep the person's pose, body proportions, and facial features the same. Only change their clothing to the items listed. The setting and background should remain similar. Make it look natural and stylish.`
+CRITICAL RULES:
+- Output ONLY ONE image. Never produce side-by-side, before/after, collage, comparison, or multiple panels.
+- Keep the person's face, body, pose, and background identical.
+- Only replace their clothes with the specified items, matching the exact colors and patterns from the product images.
+- Maintain the original photo's aspect ratio and dimensions with no added borders or padding.`
+
+    // Fetch product images in parallel
+    const itemImageParts = []
+    if (itemImageUrls && itemImageUrls.length > 0) {
+      console.log(`Fetching ${itemImageUrls.length} product images...`)
+      const fetched = await Promise.all(itemImageUrls.map(fetchImageAsBase64))
+      for (let i = 0; i < fetched.length; i++) {
+        if (fetched[i]) {
+          itemImageParts.push({
+            inlineData: {
+              mimeType: fetched[i].mimeType,
+              data: fetched[i].data,
+            },
+          })
+        }
+      }
+      console.log(`Successfully fetched ${itemImageParts.length} product images`)
+    }
 
     const client = getGemini()
     const imageModel = process.env.GEMINI_IMAGE_MODEL || 'gemini-3-pro-image-preview'
@@ -79,9 +115,14 @@ Keep the person's pose, body proportions, and facial features the same. Only cha
                 data: userPhotoBase64,
               },
             },
+            ...itemImageParts,
           ],
         },
       ],
+      config: {
+        responseModalities: ['image', 'text'],
+        numberOfImages: 1,
+      },
     })
 
     const imagePart = response.candidates?.[0]?.content?.parts?.find(

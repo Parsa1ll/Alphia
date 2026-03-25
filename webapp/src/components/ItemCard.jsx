@@ -19,6 +19,17 @@ function ItemCard({ item, selected, onToggle, glowReady }) {
         {details.length > 0 && (
           <div className="item-details">{details.join(' · ')}</div>
         )}
+        {item.sourceUrl && (
+          <a
+            href={item.sourceUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="item-shop-btn"
+            onClick={(e) => e.stopPropagation()}
+          >
+            Shop item
+          </a>
+        )}
       </div>
     </div>
   )

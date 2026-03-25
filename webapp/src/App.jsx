@@ -129,8 +129,9 @@ function App() {
 
     try {
       const itemDetails = selectedItems.map((item) => item.title).join(', ')
+      const itemImages = selectedItems.map((item) => item.imageUrl).filter(Boolean)
 
-      const outfitImage = await generateOutfitImage(itemDetails)
+      const outfitImage = await generateOutfitImage(itemDetails, itemImages)
       const messageData = await generateAlphiaMessage(outfitImage, itemDetails)
 
       setPreviewData({
@@ -145,7 +146,7 @@ function App() {
     }
   }
 
-  const generateOutfitImage = async (itemDetails) => {
+  const generateOutfitImage = async (itemDetails, itemImages) => {
     const BACKEND_URL = 'http://localhost:4000'
     const response = await fetch(`${BACKEND_URL}/api/generate-outfit`, {
       method: 'POST',
@@ -153,6 +154,7 @@ function App() {
       body: JSON.stringify({
         userPhotoBase64: userPhoto.split(',')[1],
         itemNames: itemDetails.split(', '),
+        itemImageUrls: itemImages,
       }),
     })
 
@@ -283,7 +285,9 @@ function App() {
             {loading ? (
               <LoadingState />
             ) : previewData?.image ? (
-              <img src={previewData.image} alt="Outfit preview" className="outfit-result-img" />
+              <div className="outfit-result-crop">
+                <img src={previewData.image} alt="Outfit preview" className="outfit-result-img" />
+              </div>
             ) : (
               <div className="visualization-placeholder">
                 <i className="fas fa-wand-magic-sparkles"></i>

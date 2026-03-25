@@ -153,9 +153,10 @@
     const brand =
       document.querySelector('meta[property="product:brand"]')?.content ||
       document.querySelector('meta[name="brand"]')?.content ||
+      document.querySelector('[itemprop="brand"] [itemprop="name"]')?.textContent?.trim() ||
+      document.querySelector('[itemprop="brand"]')?.content ||
       document.querySelector('[itemprop="brand"]')?.textContent?.trim() ||
       document.querySelector('[data-brand]')?.getAttribute('data-brand') ||
-      document.querySelector('[class*="brand" i]')?.textContent?.trim() ||
       document.querySelector('meta[property="og:site_name"]')?.content ||
       ''
 
